@@ -1,48 +1,19 @@
+import { Routes, Route } from "react-router-dom";
+import Navigation from "./components/navigation/navigation";
+
+import Home from "./psges/home/home";
+import Shop from "./psges/shop/shop";
+
+
 const App = () => {
   return (
-    <div className="categories-container">
-      <div className="category-container">
-        {/* <img /> */}
-        <div className="categoty-body-container">
-          <h2>Hats</h2>
-          <p>Shop now</p>
-        </div>
-      </div>
-      <div className="category-container">
-        {/* <img /> */}
-        <div className="categoty-body-container">
-          <h2>Jackets</h2>
-          <p>Shop now</p>
-        </div>
-      </div>
-
-      <div className="category-container">
-        {/* <img /> */}
-        <div className="categoty-body-container">
-          <h2>Sneakers</h2>
-          <p>Shop now</p>
-        </div>
-      </div>
-
-      <div className="category-container">
-        {/* <img /> */}
-        <div className="categoty-body-container">
-          <h2>Mens</h2>
-          <p>Shop now</p>
-        </div>
-      </div>
-
-      <div className="category-container">
-        {/* <img /> */}
-        <div className="categoty-body-container">
-          <h2>Womens</h2>
-          <p>Shop now</p>
-        </div>
-      </div>
-
-
-    </div>
+    <Routes>
+      <Route path="/" element={<Navigation />}>
+        <Route index element={<Home />} />
+        <Route path="shop" element={<Shop />} />
+      </Route>
+    </Routes>
   );
-}
+};
 
 export default App;
