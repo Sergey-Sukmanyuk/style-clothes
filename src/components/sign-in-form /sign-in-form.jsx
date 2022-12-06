@@ -25,8 +25,7 @@ const SignInForm = () => {
   };
 
   const signInGoogleHandler = async () => {
-    const { user } = await signInWithGoogle();
-    const createUserRef = await createUserFomAuth(user);
+    await signInWithGoogle();
   };
 
   const handleChange = (event) => {
@@ -39,11 +38,11 @@ const SignInForm = () => {
     event.preventDefault();
 
     try {
-      const response = await signInUserWithEmailAndPasswordForm(
+      const { user } = await signInUserWithEmailAndPasswordForm(
         email,
         password
       );
-      console.log(response);
+
       resetFormFields();
     } catch (error) {
       switch (error.code) {
@@ -81,7 +80,11 @@ const SignInForm = () => {
         />
         <div className="buttons-container">
           <Button type="submit">Sign in</Button>
-          <Button type="button" buttonType="google" onClick={signInGoogleHandler}>
+          <Button
+            type="button"
+            buttonType="google"
+            onClick={signInGoogleHandler}
+          >
             Google Sign In
           </Button>
         </div>

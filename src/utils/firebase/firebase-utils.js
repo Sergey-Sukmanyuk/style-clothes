@@ -4,7 +4,9 @@ import {
   signInWithPopup,
   GoogleAuthProvider,
   createUserWithEmailAndPassword,
-  signInWithEmailAndPassword
+  signInWithEmailAndPassword,
+  signOut,
+  onAuthStateChanged,
 } from "firebase/auth";
 
 import { getFirestore, doc, getDoc, setDoc } from "firebase/firestore";
@@ -29,40 +31,47 @@ export const auth = getAuth();
 export const signInWithGoogle = () => signInWithPopup(auth, provider);
 
 export const db = getFirestore();
-export const createUserFomAuth = async (authData, additionalInformation = {}) => {
-  if(!authData) return;
-  
-    const userDocRef = doc(db, 'users', authData.uid);
-    const userSnapshot = await getDoc(userDocRef);
-    
-    if(!userSnapshot.exists()) {
-        const { displayName, email } = authData;
-        const createAt = new Date();
-        try {
-            await setDoc(userDocRef, {
-                displayName,
-                email,
-                createAt,
-                ...additionalInformation
-            });
-        } catch (error) {
-            console.log(`Something went wrong, user didn't create: ${ error }`)
-        }
+export const createUserFomAuth = async (
+  authData,
+  additionalInformation = {}
+) => {
+  if (!authData) return;
 
-        return userDocRef;
+  const userDocRef = doc(db, "users", authData.uid);
+  const userSnapshot = await getDoc(userDocRef);
+
+  if (!userSnapshot.exists()) {
+    const { displayName, email } = authData;
+    const createAt = new Date();
+    try {
+      await setDoc(userDocRef, {
+        displayName,
+        email,
+        createAt,
+        ...additionalInformation,
+      });
+    } catch (error) {
+      console.log(`Something went wrong, user didn't create: ${error}`);
     }
-}
+
+    return userDocRef;
+  }
+};
 
 export const createUserWithEmailAndPasswordForm = async (email, password) => {
-
-  if(!email || !password) return;
+  if (!email || !password) return;
 
   return await createUserWithEmailAndPassword(auth, email, password);
-}
+};
 
 export const signInUserWithEmailAndPasswordForm = async (email, password) => {
-
-  if(!email || !password) return;
+  if (!email || !password) return;
 
   return await signInWithEmailAndPassword(auth, email, password);
-}
+};
+
+export const signOutUser = async () => await signOut(auth);
+
+export const onAuthStateChangedListener = (callback) => {
+  onAuthStateChanged(auth, callback);
+};
